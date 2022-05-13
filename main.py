@@ -1,5 +1,7 @@
 import uvicorn
 from sqlalchemy.orm import Session
+from typing import List
+
 from fastapi import Depends, FastAPI, HTTPException
 
 import utils
@@ -20,7 +22,7 @@ def get_db():
         db.close()
 
 
-@app.get("/employee/", response_model=list[schemas.Employee])
+@app.get("/employee/", response_model=List[schemas.Employee])
 def get_employees(page: int = 0, page_size: int = 10, db: Session = Depends(get_db)):
     """
         Fetch all the Employees
@@ -51,7 +53,7 @@ def create_employee(employee: schemas.EmployeeCreate, db: Session = Depends(get_
     return utils.create_employee(db=db, employee=employee)
 
 
-@app.get("/employee/{employee_id}/timesheet/", response_model=list[schemas.Timesheet])
+@app.get("/employee/{employee_id}/timesheet/", response_model=List[schemas.Timesheet])
 def get_timesheet_employee_id(
         employee_id: str, date: str = None, page: int = 0, page_size: int = 10, db: Session = Depends(get_db)
     ):
